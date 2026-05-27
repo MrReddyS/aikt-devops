@@ -149,12 +149,13 @@ if az containerapp env show -g "${RG_NAME}" -n "${CAE_NAME}" >/dev/null 2>&1; th
   echo "Container Apps environment ${CAE_NAME} already exists (skip create)."
 else
   echo "Creating internal Container Apps environment ${CAE_NAME}..."
-  az containerapp env create \
+  run_az containerapp env create \
     --name "${CAE_NAME}" \
     --resource-group "${RG_NAME}" \
     --location "${LOCATION}" \
     --infrastructure-subnet-resource-id "${CAE_SUBNET_ID}" \
-    --internal-only
+    --internal-only \
+    --logs-destination none
 fi
 
 if az containerapp show -g "${RG_NAME}" -n "${DOC_APP}" >/dev/null 2>&1; then

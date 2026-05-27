@@ -47,6 +47,12 @@ ensure_devops_python() {
   return 1
 }
 
+# Git Bash on Windows rewrites /subscriptions/... CLI args to C:/Program Files/Git/...
+# Use this wrapper for any az command that passes Azure resource IDs as arguments.
+run_az() {
+  MSYS_NO_PATHCONV=1 az "$@"
+}
+
 # Lowercase [a-z0-9-], collapse repeats, trim hyphens; then cut for Azure name length limits.
 sanitize_azure_name_segment() {
   local s="${1:-}"
