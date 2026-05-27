@@ -83,12 +83,16 @@ REPLICATION=""
 KIND=""
 VOLUME_NAME=""
 FILESHARE=""
-IFS=$'\t' read -r SA_LOCAL REPLICATION KIND VOLUME_NAME FILESHARE < <(read_storage_row "${REPO_ROOT}")
+MOUNT_PATH=""
+MOUNT_OPTIONS=""
+IFS=$'\t' read -r SA_LOCAL REPLICATION KIND VOLUME_NAME FILESHARE MOUNT_PATH MOUNT_OPTIONS < <(read_storage_row "${REPO_ROOT}")
 SA_LOCAL="${SA_LOCAL//$'\r'/}"
 REPLICATION="${REPLICATION//$'\r'/}"
 KIND="${KIND//$'\r'/}"
 VOLUME_NAME="${VOLUME_NAME//$'\r'/}"
 FILESHARE="${FILESHARE//$'\r'/}"
+MOUNT_PATH="${MOUNT_PATH//$'\r'/}"
+MOUNT_OPTIONS="${MOUNT_OPTIONS//$'\r'/}"
 
 require_config_fields \
   "resources.storage-account.name" "${SA_LOCAL}" \
