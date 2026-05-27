@@ -90,15 +90,10 @@ KIND="${KIND//$'\r'/}"
 VOLUME_NAME="${VOLUME_NAME//$'\r'/}"
 FILESHARE="${FILESHARE//$'\r'/}"
 
-for label value in \
+require_config_fields \
   "resources.storage-account.name" "${SA_LOCAL}" \
   "resources.storage-account.volume.name" "${VOLUME_NAME}" \
-  "resources.storage-account.volume.fileshare" "${FILESHARE}"; do
-  if [[ -z "${value}" || "${value}" == "null" ]]; then
-    echo "ERROR: ${label} must be set in config.yaml" >&2
-    exit 2
-  fi
-done
+  "resources.storage-account.volume.fileshare" "${FILESHARE}"
 
 STORAGE_NAME="$(build_azure_storage_account_name "${SA_LOCAL}" "${CLIENT}" "${LOCATION}")"
 SKU="Standard_${REPLICATION}"

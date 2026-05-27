@@ -5,7 +5,7 @@ set -euo pipefail
 
 _STORAGE_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
-source "${STORAGE_LIB_DIR}/../Resource_Group/_lib_config.sh"
+source "${_STORAGE_LIB_DIR}/../Resource_Group/_lib_config.sh"
 
 # Prints one line (local names from config):
 # sa_local<TAB>replication<TAB>kind<TAB>volume_name<TAB>fileshare<TAB>mount_path<TAB>mount_options

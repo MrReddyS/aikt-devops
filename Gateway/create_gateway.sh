@@ -96,16 +96,11 @@ GW_SKU="${GW_SKU//$'\r'/}"
 GW_CAPACITY="${GW_CAPACITY//$'\r'/}"
 PIP_LOCAL="${PIP_LOCAL//$'\r'/}"
 
-for label value in \
+require_config_fields \
   "resources.vnet.name" "${VNET_LOCAL}" \
   "resources.vnet.subnets.app-gateway.name" "${AGW_SUBNET_LOCAL}" \
   "resources.app-gateway.name" "${GW_LOCAL}" \
-  "resources.app-gateway.public-ip.name" "${PIP_LOCAL}"; do
-  if [[ -z "${value}" || "${value}" == "null" ]]; then
-    echo "ERROR: ${label} must be set in config.yaml" >&2
-    exit 2
-  fi
-done
+  "resources.app-gateway.public-ip.name" "${PIP_LOCAL}"
 
 VNET_NAME="$(build_azure_resource_name "${VNET_LOCAL}" "${CLIENT}" "${LOCATION}" 64)"
 SUBNET_NAME="$(build_azure_resource_name "${AGW_SUBNET_LOCAL}" "${CLIENT}" "${LOCATION}" 80)"

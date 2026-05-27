@@ -5,7 +5,7 @@ set -euo pipefail
 
 _NETWORK_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
-source "${NETWORK_LIB_DIR}/../Resource_Group/_lib_config.sh"
+source "${_NETWORK_LIB_DIR}/../Resource_Group/_lib_config.sh"
 
 # Exit 1 if the resource group does not exist in the current subscription context.
 require_resource_group() {

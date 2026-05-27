@@ -106,6 +106,24 @@ build_azure_storage_account_name() {
   echo "${combined}"
 }
 
+# Usage: require_config_fields label1 value1 label2 value2 ...
+require_config_fields() {
+  local label value
+  while [[ $# -gt 0 ]]; do
+    label="${1:-}"
+    value="${2:-}"
+    if [[ $# -lt 2 ]]; then
+      echo "ERROR: require_config_fields: missing value for ${label}" >&2
+      return 1
+    fi
+    shift 2
+    if [[ -z "${value}" || "${value}" == "null" ]]; then
+      echo "ERROR: ${label} must be set in config.yaml" >&2
+      return 1
+    fi
+  done
+}
+
 # Prints project.client (required for resource naming).
 read_project_client() {
   local root="$1"

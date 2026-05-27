@@ -89,18 +89,13 @@ AGW_SUBNET_PREFIX="${AGW_SUBNET_PREFIX//$'\r'/}"
 CAE_SUBNET_LOCAL="${CAE_SUBNET_LOCAL//$'\r'/}"
 CAE_SUBNET_PREFIX="${CAE_SUBNET_PREFIX//$'\r'/}"
 
-for label value in \
+require_config_fields \
   "resources.vnet.name" "${VNET_LOCAL}" \
   "resources.vnet.address-prefix" "${VNET_PREFIX}" \
   "resources.vnet.subnets.app-gateway.name" "${AGW_SUBNET_LOCAL}" \
   "resources.vnet.subnets.app-gateway.prefix" "${AGW_SUBNET_PREFIX}" \
   "resources.vnet.subnets.container-apps.name" "${CAE_SUBNET_LOCAL}" \
-  "resources.vnet.subnets.container-apps.prefix" "${CAE_SUBNET_PREFIX}"; do
-  if [[ -z "${value}" || "${value}" == "null" ]]; then
-    echo "ERROR: ${label} must be set in config.yaml" >&2
-    exit 2
-  fi
-done
+  "resources.vnet.subnets.container-apps.prefix" "${CAE_SUBNET_PREFIX}"
 
 VNET_NAME="$(build_azure_resource_name "${VNET_LOCAL}" "${CLIENT}" "${LOCATION}" 64)"
 AGW_SUBNET_NAME="$(build_azure_resource_name "${AGW_SUBNET_LOCAL}" "${CLIENT}" "${LOCATION}" 80)"
