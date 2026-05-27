@@ -1,0 +1,65 @@
+# Example layout for config.yaml at repo root.
+# Duplicate to config.yaml and fill real GUIDs.
+
+defaults:
+  location: westeurope
+  # Optional: used when RG scripts omit --profile (must match a key under subscriptions)
+  profile: prod
+  # Optional: default RG when --name / --location omitted (project.* is used if these are unset)
+  # resource_group:
+  #   name: rg-myapp-prod-weu
+  #   location: westeurope
+
+# Optional: alternative to defaults.resource_group for RG script defaults
+project:
+  rg: rg-myapp-prod-weu
+  location: westeurope
+  client: myclient
+  container_apps:
+    # environment_name: myclient-cae
+    docling_image: quay.io/docling-project/docling-serve:latest
+    openwebui_image: ghcr.io/open-webui/open-webui:latest
+
+# resources.*.name values are local short names; scripts expand to
+# {local}-{project.client}-{location-suffix}, e.g. vnet + myclient + westeurope -> vnet-myclient-westeu
+resources:
+  vnet:
+    name: "vnet"
+    address-prefix: "10.0.0.0/16"
+    subnets:
+      app-gateway:
+        name: "snet-appgw"
+        prefix: "10.0.1.0/24"
+      container-apps:
+        name: "snet-cae"
+        prefix: "10.0.2.0/23"
+  app-gateway:
+    name: "appgateway"
+    sku: Standard_v2
+    capacity: 1
+    public-ip:
+      name: "pip"
+  storage-account:
+    name: "staccount"
+    replication: "LRS"
+    kind: "StorageV2"
+    volume:
+      name: "volsmb"
+      fileshare: "afssmb"
+      mount-path: "/app/backend/data"
+      mount-options: "nobrl"
+
+  container-app-environment:
+    name: "cae"
+    internal: true
+
+subscriptions:
+  dev:
+    tenant_id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    subscription_id: "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"
+    display_name: "Non-prod"
+
+  prod:
+    tenant_id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    subscription_id: "zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz"
+    display_name: "Production"
