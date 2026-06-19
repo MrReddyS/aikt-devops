@@ -1,0 +1,78 @@
+# Copy to config.yaml and fill subscription GUIDs + project.client.
+#
+# Deploy:
+#   ./Resource_Group/create_rg.sh
+#   ./Network/create_vnet.sh
+#   ./Storage/create_storage.sh
+#   ./Apps/create_apps.sh
+
+defaults:
+  location: westeurope
+  profile: prod
+
+project:
+  rg: rg-myapp-prod-weu
+  location: westeurope
+  client: myclient
+
+resources:
+  vnet:
+    name: "vnet"
+    address-prefix: "10.0.0.0/16"
+    subnets:
+      app-gateway:
+        name: "snet-appgw"
+        prefix: "10.0.2.0/24"   # outside CAE /23 (10.0.0.0–10.0.1.255)
+      container-apps:
+        name: "snet-cae"
+        prefix: "10.0.0.0/23"
+
+  app-gateway:
+    enabled: false
+    name: "appgateway"
+    sku: Standard_v2
+    capacity: 1
+    public-ip:
+      name: "pip"
+
+  storage-account:
+    name: "staccount"
+    replication: "LRS"
+    kind: "StorageV2"
+    volume:
+      name: "vol-openwebui"
+      fileshare: "afsdata"
+      mount-path: "/app/backend/data"   # Azure Files + mountOptions nobrl (SQLite on SMB)
+
+  docling:
+    uvicorn-workers: 1
+    max-sync-wait: 220
+
+  container-apps:
+    environment:
+      name: cae
+    apps:
+      openwebui:
+        name: ca-openwebui
+        cpu: 2
+        memory: 4Gi
+        image: ghcr.io/open-webui/open-webui:v0.9.6
+        port: 8080
+      docling:
+        name: ca-docling
+        cpu: 4
+        memory: 16Gi
+        workload-profile: D4
+        image: quay.io/docling-project/docling-serve:latest
+        port: 5001
+
+subscriptions:
+  dev:
+    tenant_id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    subscription_id: "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"
+    display_name: "Non-prod"
+
+  prod:
+    tenant_id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    subscription_id: "zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz"
+    display_name: "Production"
