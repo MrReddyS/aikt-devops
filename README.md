@@ -84,20 +84,4 @@ Edit `project.location` in `config.yaml` (or pass `--location`), then re-run the
 ./Resource_Group/delete_rg.sh --yes
 ```
 
-## Legacy VM scripts
 
-The `Compute/` folder contains earlier VM-based scripts. Use **Apps/** for new deployments.
-
-## Project layout
-
-```
-DevOps/
-├── config.yaml
-├── Resource_Group/
-├── Network/
-├── Storage/
-├── Apps/
-├── Compute/          # legacy VM scripts
-├── Gateway/          # optional
-└── DNS/              # optional
-```
